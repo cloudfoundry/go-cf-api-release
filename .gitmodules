@@ -1,0 +1,3 @@
+[submodule "src/cloudgontroller"]
+	path = src/cloudgontroller
+	url = https://github.tools.sap/cloudfoundry/cloudgontroller

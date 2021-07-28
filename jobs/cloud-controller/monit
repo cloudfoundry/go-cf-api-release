@@ -1,0 +1,5 @@
+check process cloud-controller
+  with pidfile /var/vcap/sys/run/bpm/cloud-controller/cloud-controller.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start cloud-controller"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop cloud-controller"
+  group vcap

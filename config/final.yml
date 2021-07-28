@@ -1,0 +1,5 @@
+name: cloud-controller
+blobstore:
+  provider: local
+  options:
+    blobstore_path: /tmp/blobstore

@@ -1,0 +1,14 @@
+---
+name: cloud-controller
+
+templates:
+  bpm.yml.erb: config/bpm.yml
+  cloud-controller.yml.erb: config/cloud-controller.yml
+
+packages:
+- cloud-controller
+
+properties:
+  ccdb.db_scheme:
+    description: "The type of database being used. mysql or postgres"
+    default: postgres

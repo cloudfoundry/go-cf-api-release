@@ -1,0 +1,14 @@
+---
+name: cloud-controller
+
+dependencies:
+- golang-1.16-linux
+
+files:
+- cloudgontroller/**/*.go
+- cloudgontroller/go.mod
+- cloudgontroller/go.sum
+- cloudgontroller/internal/app/cloudgontroller/storage/db/migrations/**/*.sql
+
+excluded_files:
+- cloudgontroller/**/*_test.go

@@ -1,0 +1,13 @@
+<%-
+  executable = {
+    'postgres' => 'cloud-controller-psql',
+    'mysql' => 'cloud-controller-mysql'
+  }.fetch(p 'ccdb.db_scheme') {
+    raise "ccdb.db_scheme #{p 'ccdb.db_scheme'} is not supported"
+  }
+-%>
+processes:
+- name: cloud-controller
+  executable: <%= executable %>
+  args:
+  - /var/vcap/jobs/cloud-controller/config/cloud-controller.yml
