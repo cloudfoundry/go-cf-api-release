@@ -12,3 +12,5 @@ properties:
   ccdb.db_scheme:
     description: "The type of database being used. mysql or postgres"
     default: postgres
+  ccdb.connectionstring:
+    description: "String containing connection information to DB."
