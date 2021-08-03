@@ -6,6 +6,7 @@ describe 'cloud-controller' do
   let(:job_name) { 'cloud-controller' }
   let(:release) { Bosh::Template::Test::ReleaseDir.new(File.join(File.dirname(__FILE__), '..')) }
   let(:job) { release.job(job_name) }
+  let(:ccdb_config) { { 'db_scheme' => 'postgres' } }
   let(:ccdb_link) do
     Bosh::Template::Test::Link.new(
       name: 'cloud_controller_db',
@@ -14,13 +15,10 @@ describe 'cloud-controller' do
       }
     )
   end
-  let(:rendered_template) do
-    template.render({}, consumes: [ccdb_link])
-  end
+  let(:rendered_template) { template.render({}, consumes: [ccdb_link]) }
 
   describe 'bpm.yml' do
     let(:template) { job.template('config/bpm.yml') }
-    let(:ccdb_config) { {'db_scheme' => 'postgres'} }
 
     context 'postgres' do
       it 'uses the psql binary when ccdb.db_scheme is postgres' do
@@ -30,7 +28,7 @@ describe 'cloud-controller' do
     end
 
     context 'mysql' do
-      let(:ccdb_config) { {'db_scheme' => 'mysql'} }
+      let(:ccdb_config) { { 'db_scheme' => 'mysql' } }
 
       it 'uses the mysql binary when ccdb.db_scheme is mysql' do
         process = get_process_from_bpm(YAML.safe_load(rendered_template), job_name)
@@ -39,7 +37,7 @@ describe 'cloud-controller' do
     end
 
     context 'db_scheme is not postgres or mysql' do
-      let(:ccdb_config) { {'db_scheme' => 'foo'} }
+      let(:ccdb_config) { { 'db_scheme' => 'foo' } }
 
       it 'raises an error' do
         expect { rendered_template }.to raise_error('ccdb.db_scheme foo is not supported')
@@ -54,7 +52,7 @@ describe 'cloud-controller' do
 
   describe 'cloud-controller.yml' do
     let(:template) { job.template('config/cloud-controller.yml') }
-    let(:default_ccdb_config) do
+    let(:ccdb_config) do
       {
         'db_scheme' => 'postgres',
         'address' => 'db.example.com',
@@ -69,8 +67,6 @@ describe 'cloud-controller' do
     end
 
     context 'postgres' do
-      let(:ccdb_config) { default_ccdb_config }
-
       it 'creates a psql connection string' do
         config_file = YAML.safe_load(rendered_template)
         expect(config_file['db']['connectionstring']).to eq 'host=db.example.com port=1234 user=admin_user dbname=ccdb password=admin_password sslmode=disable'
@@ -78,7 +74,7 @@ describe 'cloud-controller' do
     end
 
     context 'mysql' do
-      let(:ccdb_config) { default_ccdb_config.merge({ 'db_scheme' => 'mysql' }) }
+      let(:ccdb_config) { super().merge({ 'db_scheme' => 'mysql' }) }
 
       it 'creates a mysql connection string' do
         config_file = YAML.safe_load(rendered_template)
@@ -87,7 +83,7 @@ describe 'cloud-controller' do
     end
 
     context 'missing address property' do
-      let(:ccdb_config) { default_ccdb_config.reject { |k, _| k == 'address' } }
+      let(:ccdb_config) { super().reject { |k, _| k == 'address' } }
 
       it 'raises an error' do
         expect { rendered_template }.to raise_error(KeyError, 'key not found: "address"')
@@ -95,7 +91,7 @@ describe 'cloud-controller' do
     end
 
     context 'missing port property' do
-      let(:ccdb_config) { default_ccdb_config.reject { |k, _| k == 'port' } }
+      let(:ccdb_config) { super().reject { |k, _| k == 'port' } }
 
       it 'raises an error' do
         expect { rendered_template }.to raise_error(KeyError, 'key not found: "port"')
