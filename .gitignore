@@ -3,3 +3,4 @@ dev_releases/*
 .final_builds/*
 releases/*
 .vscode/*
+cloudgontroller-boshrelease-*.tgz

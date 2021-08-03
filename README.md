@@ -15,7 +15,12 @@ git describe --tags --abbrev=0
 export VERSION=<version>
 bosh create-release --final --version "$VERSION" --tarball "cloudgontroller-boshrelease-$VERSION.tgz"
 git tag "v$VERSION"
+git push
 git push --tags
 ```
 
-This will leave you with a tarball named `cloudgontroller-boshrelease-0.0.X.tgz` which should be uploaded to Artifactory under the path `com/sap/cp/cloudfoundry/cloudgontroller-boshrelease/0.0.X`
+This will leave you with a tarball named `cloudgontroller-boshrelease-0.0.X.tgz` which should be uploaded to Artifactory under the path `com/sap/cp/cloudfoundry/cloudgontroller-boshrelease/0.0.X`.
+Get the Artifactory password from PassVault and run:
+```
+curl -f -u "deploy.releases.cfp:<artifactory_password>" --upload-file "cloudgontroller-boshrelease-$VERSION.tgz" "https://common.repositories.cloud.sap/artifactory/deploy.releases.sapcp/com/sap/cp/cloudfoundry/cloudgontroller-boshrelease/$VERSION/cloudgontroller-boshrelease-$VERSION.tgz"
+```
