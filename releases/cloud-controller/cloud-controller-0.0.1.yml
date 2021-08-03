@@ -1,0 +1,27 @@
+name: cloud-controller
+version: 0.0.1
+commit_hash: c7d789a
+uncommitted_changes: false
+jobs:
+- name: cloud-controller
+  version: 6faed4c3e2ee526d9e1f89cb44a558a0b275eadceed26d82edff6ca930ce4763
+  fingerprint: 6faed4c3e2ee526d9e1f89cb44a558a0b275eadceed26d82edff6ca930ce4763
+  sha1: sha256:0512705208a2dfe4e997f8e6c7cc3c95e37f5d58cb6ede160d1dedb82b98a3f6
+  packages:
+  - cloud-controller
+packages:
+- name: cloud-controller
+  version: dfaee22ed93ca424e41385516e175dcca8b1f3299bc6ddce2f41e3f000ac5245
+  fingerprint: dfaee22ed93ca424e41385516e175dcca8b1f3299bc6ddce2f41e3f000ac5245
+  sha1: sha256:37181ca1657bd7e6e78a8badd035c4cbbfac5f13590681c5db956bf3af371855
+  dependencies:
+  - golang-1.16-linux
+- name: golang-1.16-linux
+  version: 4fe4dbf087b15d42474eeaf6b9cf1c51683e175bcc52818942137446f7f9d801
+  fingerprint: 4fe4dbf087b15d42474eeaf6b9cf1c51683e175bcc52818942137446f7f9d801
+  sha1: sha256:99251f5ee31bb1eac8bd0e274c2b56c37ebbffe06460245b4f1692a567e8b558
+  dependencies: []
+license:
+  version: 2c0a5f9728dc9bdeb824dcba2064446f959276538da30c81463b3fe735bc2669
+  fingerprint: 2c0a5f9728dc9bdeb824dcba2064446f959276538da30c81463b3fe735bc2669
+  sha1: sha256:9b1ab90e2fff158272c0f4e95ba088ca02f5e952cc55bf8d1d6d3342825b059d
