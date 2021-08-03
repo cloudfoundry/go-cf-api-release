@@ -1,10 +1,14 @@
 <%-
-  executable = {
-    'postgres' => 'cloud-controller-psql',
-    'mysql' => 'cloud-controller-mysql'
-  }.fetch(p 'ccdb.db_scheme') {
-    raise "ccdb.db_scheme #{p 'ccdb.db_scheme'} is not supported"
-  }
+  ccdb = link('cloud_controller_db').p('ccdb')
+  db_scheme = ccdb.fetch('db_scheme')
+  executable = case db_scheme
+  when 'postgres'
+    'cloud-controller-psql'
+  when 'mysql'
+    'cloud-controller-mysql'
+  else
+    raise "ccdb.db_scheme #{db_scheme} is not supported"
+  end
 -%>
 processes:
 - name: cloud-controller
