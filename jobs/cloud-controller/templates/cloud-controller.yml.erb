@@ -1,6 +1,18 @@
+<%-
+  db = p('ccdb.databases').find { |db| db['tag'] == 'cc' }
+  db_user = p('ccdb.roles').find { |role| role['tag'] == 'admin' }
+  connection_string = case p('ccdb.db_scheme')
+  when 'postgres'
+    "host=#{p 'ccdb.address'} port=#{p 'ccdb.port'} user=#{db_user['name']} dbname=#{db['name']} password=#{db_user['password']} sslmode=disable"
+  when 'mysql'
+    "#{db_user['name']}:#{db_user['password']}@tcp(#{p 'ccdb.address'}:#{p 'ccdb.port'})/#{db['name']}?tls=false&parseTime=true"
+  else
+    raise "ccdb.db_scheme #{p 'ccdb.db_scheme'} is not supported"
+  end
+-%>
 listen: 127.0.0.1:8282
 db:
-  connectionstring: <%= p 'ccdb.connectionstring' %>
+  connectionstring: <%= connection_string %>
   type: <%= p 'ccdb.db_scheme' %>
   create: false
   migrate: false

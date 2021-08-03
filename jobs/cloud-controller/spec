@@ -12,5 +12,11 @@ properties:
   ccdb.db_scheme:
     description: "The type of database being used. mysql or postgres"
     default: postgres
-  ccdb.connectionstring:
-    description: "String containing connection information to DB."
+  ccdb.databases:
+    description: "Contains the name of the database on the database server"
+  ccdb.roles:
+    description: "Users to create on the database when seeding"
+  ccdb.address:
+    description: "The address of the database server"
+  ccdb.port:
+    description: "The port of the database server"
