@@ -1,3 +1,5 @@
 .dev_builds/*
 dev_releases/*
+.final_builds/*
+releases/*
 .vscode/*
