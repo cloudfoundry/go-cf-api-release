@@ -1,26 +1,34 @@
 # Cloud Controller BOSH Release
 BOSH release for Go implementation of the Cloud Controller
 
+
+## Project setup
+After cloning make sure you got the submodules checked out as well `git submodule update --init --recursive`
+
+You need to install the [bosh cli](https://bosh.io/docs/cli-v2-install/)
+
+Install the ruby version according to the [.ruby-version](.ruby-version) file
+
+After installing ruby run `bundle install`
+
 ## Building a final release
-We do not currently have a shared/public blobstore.
-This means that you will not be able to pull/push blobs for previous releases or use the vendored golang package.
-To create a new final release:
+Final releases are built by [this pipeline](https://dev.azure.com/sap/CP-ControlPlane/_build?definitionId=552). It is triggered by new tags.
+To create a new tag do the following:
 ```
-git clone https://github.tools.sap/cloudfoundry/cloudgontroller-boshrelease --recursive
-bosh vendor-package golang-1.16-linux ./src/golang-release
 # Get the latest tag
 git fetch --tags
 git describe --tags --abbrev=0
-# Using the next version after the latest tag without the 'v'
-export VERSION=<version>
-bosh create-release --final --version "$VERSION" --tarball "cloudgontroller-boshrelease-$VERSION.tgz"
-git tag "v$VERSION"
+
+# Using the next version after the latest tag
+git tag "v<next_version>"
 git push
 git push --tags
 ```
-
-This will leave you with a tarball named `cloudgontroller-boshrelease-0.0.X.tgz` which should be uploaded to Artifactory under the path `com/sap/cp/cloudfoundry/cloudgontroller-boshrelease/0.0.X`.
-Get the Artifactory password from PassVault and run:
+## Building a release locally
+We do not currently have a shared/public blobstore.
+This means that you will not be able to pull/push blobs for previous releases or use the vendored golang package.
+To create a new dev release:
 ```
-curl -f -u "deploy.releases.cfp:<artifactory_password>" --upload-file "cloudgontroller-boshrelease-$VERSION.tgz" "https://common.repositories.cloud.sap/artifactory/deploy.releases.sapcp/com/sap/cp/cloudfoundry/cloudgontroller-boshrelease/$VERSION/cloudgontroller-boshrelease-$VERSION.tgz"
+bosh vendor-package golang-1.16-linux ./src/golang-release
+bosh create-release --tarball "cloudgontroller-boshrelease.tgz"
 ```
