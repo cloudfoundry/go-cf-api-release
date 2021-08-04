@@ -6,8 +6,8 @@ We do not currently have a shared/public blobstore.
 This means that you will not be able to pull/push blobs for previous releases or use the vendored golang package.
 To create a new final release:
 ```
-git clone git@github.com:bosh-packages/golang-release.git ~/work/golang-release
-bosh vendor-package golang-1.16-linux ~/work/golang-release
+git clone https://github.tools.sap/cloudfoundry/cloudgontroller-boshrelease --recursive
+bosh vendor-package golang-1.16-linux ./src/golang-release
 # Get the latest tag
 git fetch --tags
 git describe --tags --abbrev=0
