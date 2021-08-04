@@ -1,3 +1,5 @@
 Layout/LineLength:
-  Enabled: true
   Max: 160
+
+Metrics/BlockLength:
+  Max: 100
