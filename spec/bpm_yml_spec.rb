@@ -1,6 +1,6 @@
-require 'rspec'
-require 'bosh/template/test'
-require 'bosh/template'
+# frozen_string_literal: true
+
+require_relative 'spec_helper'
 
 describe 'bpm.yml' do
   let(:job_name) { 'cloud-controller' }

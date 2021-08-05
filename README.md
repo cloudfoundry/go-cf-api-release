@@ -11,6 +11,14 @@ Install the ruby version according to the [.ruby-version](.ruby-version) file
 
 After installing ruby run `bundle install`
 
+## Running spec tests
+Templates should always include `rspec` tests to ensure the templating works as intended.
+See the [spec/](spec) directory for existing tests and examples.
+To run the tests:
+```bash
+bundle exec rspec -P spec/*_spec.rb
+```
+
 ## Building a final release
 Final releases are built by [this pipeline](https://dev.azure.com/sap/CP-ControlPlane/_build?definitionId=552). It is triggered by new tags.
 To create a new tag do the following:

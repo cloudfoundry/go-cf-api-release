@@ -4,6 +4,7 @@ name: cloud-controller
 templates:
   bpm.yml.erb: config/bpm.yml
   cloud-controller.yml.erb: config/cloud-controller.yml
+  route-registrar-health-check.sh.erb: bin/route-registrar-health-check.sh
 
 packages:
 - cloud-controller
@@ -12,4 +13,7 @@ consumes:
 - name: cloud_controller_db
   type: cloud_controller_db
 
-properties: {}
+properties:
+  cc.public_tls.port:
+    description: "Port reverse proxy is listening on"
+    default: 443

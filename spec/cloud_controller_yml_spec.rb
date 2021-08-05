@@ -1,6 +1,6 @@
-require 'rspec'
-require 'bosh/template/test'
-require 'bosh/template'
+# frozen_string_literal: true
+
+require_relative 'spec_helper'
 
 describe 'cloud-controller' do
   let(:job_name) { 'cloud-controller' }
