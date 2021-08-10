@@ -9,6 +9,7 @@ files:
 - cloudgontroller/go.mod
 - cloudgontroller/go.sum
 - cloudgontroller/internal/app/cloudgontroller/storage/db/migrations/**/*.sql
+- cloudgontroller/internal/app/cloudgontroller/config/defaults.yml
 
 excluded_files:
 - cloudgontroller/**/*_test.go

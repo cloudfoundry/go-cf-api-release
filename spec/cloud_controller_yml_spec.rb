@@ -32,12 +32,12 @@ describe 'cloud-controller' do
   describe 'database configuration' do
     subject(:rendering) { YAML.safe_load(template.render({}, consumes: [ccdb_link]))['db'] }
     context 'db_scheme is postgres' do
-      it { is_expected.to include('connectionstring' => 'host=db.example.com port=1234 user=admin_user dbname=ccdb password=admin_password sslmode=disable') }
+      it { is_expected.to include('connection_string' => 'host=db.example.com port=1234 user=admin_user dbname=ccdb password=admin_password sslmode=disable') }
     end
 
     context 'db_scheme is mysql' do
       let(:ccdb_config) { super().merge({ 'db_scheme' => 'mysql' }) }
-      it { is_expected.to include('connectionstring' => 'admin_user:admin_password@tcp(db.example.com:1234)/ccdb?tls=false&parseTime=true') }
+      it { is_expected.to include('connection_string' => 'admin_user:admin_password@tcp(db.example.com:1234)/ccdb?tls=false&parseTime=true') }
     end
 
     context 'missing address property' do
@@ -58,7 +58,15 @@ describe 'cloud-controller' do
   end
 
   describe 'uaa configuration' do
-    let(:uaa_config) { {} }
+    let(:uaa_config) do
+      {
+        'ca_cert' => <<~EOCERT
+          --- BEGIN CERT ---
+          cert contents
+          --- END CERT ---
+        EOCERT
+      }
+    end
     subject(:rendering) { YAML.safe_load(template.render({ 'uaa' => uaa_config }, consumes: [ccdb_link]))['uaa'] }
 
     context 'defaults are used' do
@@ -67,12 +75,13 @@ describe 'cloud-controller' do
 
     context 'url and port are provided' do
       let(:uaa_config) do
-        {
-          'internal_url' => 'custom.uaa.hostname',
-          'tls_port' => 8888
-        }
+        super().merge({ 'internal_url' => 'custom.uaa.hostname', 'tls_port' => 8888 })
       end
       it { is_expected.to include('url' => 'https://custom.uaa.hostname:8888') }
+    end
+
+    context 'ca_cert is provided' do
+      it { is_expected.to include('client' => { 'tls_config' => { 'ca_file' => '/var/vcap/jobs/cloud-controller/tls/uaa/ca.crt' } }) }
     end
   end
 end

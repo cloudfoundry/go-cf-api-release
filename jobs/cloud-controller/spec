@@ -5,6 +5,7 @@ templates:
   bpm.yml.erb: config/bpm.yml
   cloud-controller.yml.erb: config/cloud-controller.yml
   route-registrar-health-check.sh.erb: bin/route-registrar-health-check.sh
+  tls/uaa/ca.crt.erb: tls/uaa/ca.crt
 
 packages:
 - cloud-controller
@@ -24,3 +25,5 @@ properties:
   uaa.tls_port:
     description: "The port used by UAA for ssl connections"
     default: 8443
+  uaa.ca_cert:
+    description: "The certificate authority being used by UAA"

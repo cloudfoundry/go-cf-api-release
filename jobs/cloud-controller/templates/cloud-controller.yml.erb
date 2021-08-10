@@ -14,7 +14,7 @@
 -%>
 listen: 127.0.0.1:8282
 db:
-  connectionstring: <%= connection_string %>
+  connection_string: <%= connection_string %>
   type: <%= db_scheme %>
   create: false
   migrate: false
@@ -23,3 +23,6 @@ log:
   production: false
 uaa:
   url: <%= "https://#{p('uaa.internal_url')}:#{p('uaa.tls_port')}" %>
+  client:
+    tls_config:
+      ca_file: /var/vcap/jobs/cloud-controller/tls/uaa/ca.crt
