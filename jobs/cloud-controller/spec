@@ -17,3 +17,10 @@ properties:
   cc.public_tls.port:
     description: "Port reverse proxy is listening on"
     default: 443
+
+  uaa.internal_url:
+    description: "The internal URL used by UAA"
+    default: "uaa.service.cf.internal"
+  uaa.tls_port:
+    description: "The port used by UAA for ssl connections"
+    default: 8443

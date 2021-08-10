@@ -21,3 +21,5 @@ db:
 log:
   level: debug
   production: false
+uaa:
+  url: <%= "https://#{p('uaa.internal_url')}:#{p('uaa.tls_port')}" %>
