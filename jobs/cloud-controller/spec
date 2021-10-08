@@ -13,11 +13,29 @@ packages:
 consumes:
 - name: cloud_controller_db
   type: cloud_controller_db
+- name: cloud_controller_internal
+  type: cloud_controller_internal
 
 properties:
   cc.public_tls.port:
     description: "Port reverse proxy is listening on"
     default: 443
+  
+  name:
+    description: "'name' attribute in the info endpoints"
+    default: ""
+  build:
+    description: "'build' attribute in the info endpoints"
+    default: ""
+  version:
+    description: "'version' attribute in the info endpoints"
+    default: 0
+  support_address:
+    description: "'support' attribute in the info endpoints"
+    default: ""
+  description:
+    description: "'description' attribute in the info endpoints"
+    default: ""
 
   uaa.internal_url:
     description: "The internal URL used by UAA"

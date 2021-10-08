@@ -13,6 +13,14 @@
   end
 -%>
 listen: 127.0.0.1:8282
+external_domain: <%= link('cloud_controller_internal').p("cc.external_host") %>.<%= link('cloud_controller_internal').p("system_domain") %>
+external_protocol: <%= link('cloud_controller_internal').p("cc.external_protocol") %>
+info:
+  name: "<%= p("name") %>"
+  build: "<%= p("build") %>"
+  version: <%= p("version") %>
+  support_address: "<%= p("support_address") %>"
+  description: "<%= p("description") %>"
 db:
   connection_string: <%= connection_string %>
   type: <%= db_scheme %>
