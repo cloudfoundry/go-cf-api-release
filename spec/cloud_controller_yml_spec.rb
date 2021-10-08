@@ -28,9 +28,21 @@ describe 'cloud-controller' do
       }
     )
   end
+  let(:ccinternal_link) do
+    Bosh::Template::Test::Link.new(
+      name: 'cloud_controller_internal',
+      properties: {
+        'system_domain' => 'example.com',
+        'cc' => {
+          'external_host' => 'api',
+          'external_protocol' => 'https'
+        },
+      }
+    )
+  end
 
   describe 'database configuration' do
-    subject(:rendering) { YAML.safe_load(template.render({}, consumes: [ccdb_link]))['db'] }
+    subject(:rendering) { YAML.safe_load(template.render({}, consumes: [ccdb_link, ccinternal_link]))['db'] }
     context 'db_scheme is postgres' do
       it { is_expected.to include('connection_string' => 'host=db.example.com port=1234 user=admin_user dbname=ccdb password=admin_password sslmode=disable') }
     end
@@ -67,7 +79,7 @@ describe 'cloud-controller' do
         EOCERT
       }
     end
-    subject(:rendering) { YAML.safe_load(template.render({ 'uaa' => uaa_config }, consumes: [ccdb_link]))['uaa'] }
+    subject(:rendering) { YAML.safe_load(template.render({ 'uaa' => uaa_config }, consumes: [ccdb_link, ccinternal_link]))['uaa'] }
 
     context 'defaults are used' do
       it { is_expected.to include('url' => 'https://uaa.service.cf.internal:8443') }
@@ -82,6 +94,46 @@ describe 'cloud-controller' do
 
     context 'ca_cert is provided' do
       it { is_expected.to include('client' => { 'tls_config' => { 'ca_file' => '/var/vcap/jobs/cloud-controller/tls/uaa/ca.crt' } }) }
+    end
+  end
+
+
+  describe 'cc info configuration' do
+    let(:cc_config) { {} }
+    subject(:rendering) { YAML.safe_load(template.render(cc_config, consumes: [ccdb_link, ccinternal_link]))['info'] }
+
+    context 'defaults are used' do
+      it { is_expected.to include('name' => '') }
+      it { is_expected.to include('build' => '') }
+      it { is_expected.to include('support_address' => '') }
+      it { is_expected.to include('version' => 0) }
+      it { is_expected.to include('description' => '') }
+    end
+
+    context 'info is provided' do
+      let(:cc_config) do
+        super().merge({
+          'name' => 'test',
+          'build'  => 'custom',
+          'support_address' => 'help@example.com',
+          'version' => 1,
+          'description' => 'test',
+        })
+      end
+      it { is_expected.to include('name' => 'test') }
+      it { is_expected.to include('build' => 'custom') }
+      it { is_expected.to include('support_address' => 'help@example.com') }
+      it { is_expected.to include('version' => 1) }
+      it { is_expected.to include('description' => 'test') }
+    end
+  end
+
+  describe 'cc configuration' do
+    subject(:rendering) { YAML.safe_load(template.render( {}, consumes: [ccdb_link, ccinternal_link])) }
+
+    context 'link provides properties' do
+      it { is_expected.to include('external_domain' => 'api.example.com') }
+      it { is_expected.to include('external_protocol' => 'https') }
     end
   end
 end
