@@ -11,16 +11,20 @@
   else
     raise "ccdb.db_scheme #{db_scheme} is not supported"
   end
+
+  system_domain = link('cloud_controller_internal').p('system_domain')
+  uaa_url = p('uaa.url', "#{p('login.protocol')}://uaa.#{system_domain}")
+  login_url = p('login.enabled') ? p('login.url', "#{p('login.protocol')}://login.#{system_domain}") : uaa_url
 -%>
 listen: 127.0.0.1:8282
-external_domain: <%= link('cloud_controller_internal').p("cc.external_host") %>.<%= link('cloud_controller_internal').p("system_domain") %>
-external_protocol: <%= link('cloud_controller_internal').p("cc.external_protocol") %>
+external_domain: <%= link('cloud_controller_internal').p('cc.external_host') %>.<%= system_domain %>
+external_protocol: <%= link('cloud_controller_internal').p('cc.external_protocol') %>
 info:
-  name: "<%= p("name") %>"
-  build: "<%= p("build") %>"
-  version: <%= p("version") %>
-  support_address: "<%= p("support_address") %>"
-  description: "<%= p("description") %>"
+  name: "<%= p('name') %>"
+  build: "<%= p('build') %>"
+  version: <%= p('version') %>
+  support_address: "<%= p('support_address') %>"
+  description: "<%= p('description') %>"
 db:
   connection_string: <%= connection_string %>
   type: <%= db_scheme %>
@@ -34,3 +38,13 @@ uaa:
   client:
     tls_config:
       ca_file: /var/vcap/jobs/cloud-controller/tls/uaa/ca.crt
+urls:
+  log_stream: https://log-stream.<%= system_domain %>
+  log_cache: https://log-cache.<%= system_domain %>
+  doppler: ws<%= 's' if p('doppler.use_ssl') %>://doppler.<%= system_domain %>:<%= p('doppler.port') %>
+  login: <%= login_url %>
+  uaa: <%= uaa_url %>
+app_ssh:
+  endpoint: <%= "ssh.#{system_domain}:#{p('app_ssh.port')}" %>
+  oauth_client: <%= p('app_ssh.oauth_client_id') %>
+  host_key_fingerprint: <%= p('app_ssh.host_key_fingerprint', nil) %>
