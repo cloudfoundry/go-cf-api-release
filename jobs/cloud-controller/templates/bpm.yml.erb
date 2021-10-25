@@ -15,3 +15,6 @@ processes:
   executable: /var/vcap/jobs/cloud-controller/packages/cloud-controller/<%= executable %>
   args:
   - /var/vcap/jobs/cloud-controller/config/cloud-controller.yml
+  limits:
+    processes: 3000000
+    open_files: 800000
