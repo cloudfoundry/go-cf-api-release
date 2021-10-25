@@ -200,4 +200,34 @@ describe 'cloud-controller' do
       it { is_expected.to include('external_protocol' => 'https') }
     end
   end
+
+  describe 'cc db configuration' do
+    let(:cc_config) { {} }
+    subject(:rendering) { YAML.safe_load(template.render(cc_config, consumes: [ccdb_link, ccinternal_link]))['db'] }
+
+    context 'defaults are used' do
+      it { is_expected.to include('max_connections' => 100) }
+      it { is_expected.to include('min_connections' => 20) }
+    end
+
+    context 'db config is provided' do
+      let(:cc_config) { super().merge({ 'db' => {'max_connections' => 50,'min_connections' => 10 }}) }
+      it { is_expected.to include('min_connections' => 10) }
+      it { is_expected.to include('max_connections' => 50) }
+
+    end
+    context 'min_connections is smaller than 1' do
+      let(:cc_config) { super().merge({ 'db' => {'min_connections' => 0 }}) }
+      it 'raises an error' do
+        expect { rendering }.to raise_error(RuntimeError, 'db.min_connections must be between 1 and 1000')
+      end
+    end
+
+    context 'min_connections is larger than max_connections' do
+      let(:cc_config) { super().merge({ 'db' => {'max_connections' => 1 }}) }
+      it 'raises an error' do
+        expect { rendering }.to raise_error(RuntimeError, 'db.min_connections must be larger or equal to db.max_connections')
+      end
+    end
+  end
 end

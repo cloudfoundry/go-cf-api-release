@@ -1,15 +1,21 @@
 <%-
-  ccdb = link('cloud_controller_db').p('ccdb')
-  db = ccdb.fetch('databases').find { |db| db.fetch('tag') == 'cc' }
-  db_user = ccdb.fetch('roles').find { |role| role.fetch('tag') == 'admin' }
-  db_scheme = ccdb.fetch('db_scheme')
+  ccdb_link = link('cloud_controller_db').p('ccdb')
+  db = ccdb_link.fetch('databases').find { |db| db.fetch('tag') == 'cc' }
+  db_user = ccdb_link.fetch('roles').find { |role| role.fetch('tag') == 'admin' }
+  db_scheme = ccdb_link.fetch('db_scheme')
   connection_string = case db_scheme
   when 'postgres'
-    "host=#{ccdb.fetch('address')} port=#{ccdb.fetch('port')} user=#{db_user.fetch('name')} dbname=#{db.fetch('name')} password=#{db_user.fetch('password')} sslmode=disable"
+    "host=#{ccdb_link.fetch('address')} port=#{ccdb_link.fetch('port')} user=#{db_user.fetch('name')} dbname=#{db.fetch('name')} password=#{db_user.fetch('password')} sslmode=disable"
   when 'mysql'
-    "#{db_user.fetch('name')}:#{db_user.fetch('password')}@tcp(#{ccdb.fetch('address')}:#{ccdb.fetch('port')})/#{db.fetch('name')}?tls=false&parseTime=true"
+    "#{db_user.fetch('name')}:#{db_user.fetch('password')}@tcp(#{ccdb_link.fetch('address')}:#{ccdb_link.fetch('port')})/#{db.fetch('name')}?tls=false&parseTime=true"
   else
     raise "ccdb.db_scheme #{db_scheme} is not supported"
+  end
+
+  if p('db.min_connections') <= 0
+    raise "db.min_connections must be between 1 and 1000"
+  elsif p('db.min_connections') > p('db.max_connections')
+    raise "db.min_connections must be larger or equal to db.max_connections"
   end
 
   system_domain = link('cloud_controller_internal').p('system_domain')
@@ -30,6 +36,8 @@ db:
   type: <%= db_scheme %>
   create: false
   migrate: false
+  max_connections: <%= p('db.max_connections') %>
+  min_connections: <%= p('db.min_connections') %>
 log:
   level: debug
   production: false

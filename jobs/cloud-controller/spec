@@ -21,6 +21,13 @@ properties:
     description: "Port reverse proxy is listening on"
     default: 443
 
+  db.max_connections:
+    description: "maximum number of db connection in db connection pool"
+    default: 100
+  db.min_connections:
+    description: "minimal number of db connection in db connection pool"
+    default: 20
+
   name:
     description: "'name' attribute in the info endpoints"
     default: ""
