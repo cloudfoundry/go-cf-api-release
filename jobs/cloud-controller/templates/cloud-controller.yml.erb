@@ -1,13 +1,19 @@
 <%-
   ccdb_link = link('cloud_controller_db').p('ccdb')
+  database_address = nil
+  if ccdb_link.key?("address")
+    database_address = ccdb_link.fetch("address")
+  else
+    database_address = link('database').p('instances')[0].fetch('address')
+  end
   db = ccdb_link.fetch('databases').find { |db| db.fetch('tag') == 'cc' }
   db_user = ccdb_link.fetch('roles').find { |role| role.fetch('tag') == 'admin' }
   db_scheme = ccdb_link.fetch('db_scheme')
   connection_string = case db_scheme
   when 'postgres'
-    "host=#{ccdb_link.fetch('address')} port=#{ccdb_link.fetch('port')} user=#{db_user.fetch('name')} dbname=#{db.fetch('name')} password=#{db_user.fetch('password')} sslmode=disable"
+    "host=#{database_address} port=#{ccdb_link.fetch('port')} user=#{db_user.fetch('name')} dbname=#{db.fetch('name')} password=#{db_user.fetch('password')} sslmode=disable"
   when 'mysql'
-    "#{db_user.fetch('name')}:#{db_user.fetch('password')}@tcp(#{ccdb_link.fetch('address')}:#{ccdb_link.fetch('port')})/#{db.fetch('name')}?tls=false&parseTime=true"
+    "#{db_user.fetch('name')}:#{db_user.fetch('password')}@tcp(#{database_address}:#{ccdb_link.fetch('port')})/#{db.fetch('name')}?tls=false&parseTime=true"
   else
     raise "ccdb.db_scheme #{db_scheme} is not supported"
   end

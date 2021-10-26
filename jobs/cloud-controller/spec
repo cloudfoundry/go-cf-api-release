@@ -11,6 +11,9 @@ packages:
 - cloud-controller
 
 consumes:
+- name: database
+  type: database
+  optional: true
 - name: cloud_controller_db
   type: cloud_controller_db
 - name: cloud_controller_internal
