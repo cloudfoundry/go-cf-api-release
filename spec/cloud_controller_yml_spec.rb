@@ -40,6 +40,16 @@ describe 'cloud-controller' do
       }
     )
   end
+  let(:database_link) do
+    Bosh::Template::Test::Link.new(
+      name: 'database',
+      properties: {
+        'instances' => [{
+          'address' => '10.0.16.5'
+        }]
+      }
+    )
+  end
 
   describe 'database configuration' do
     subject(:rendering) { YAML.safe_load(template.render({}, consumes: [ccdb_link, ccinternal_link]))['db'] }
@@ -52,20 +62,27 @@ describe 'cloud-controller' do
       it { is_expected.to include('connection_string' => 'admin_user:admin_password@tcp(db.example.com:1234)/ccdb?tls=false&parseTime=true') }
     end
 
-    context 'missing address property' do
-      let(:ccdb_config) { super().reject { |k, _| k == 'address' } }
-
-      it 'raises an error' do
-        expect { rendering }.to raise_error(KeyError, 'key not found: "address"')
-      end
-    end
-
     context 'missing port property' do
       let(:ccdb_config) { super().reject { |k, _| k == 'port' } }
 
       it 'raises an error' do
         expect { rendering }.to raise_error(KeyError, 'key not found: "port"')
       end
+    end
+  end
+
+  describe 'database singleton VM configuration' do
+    subject(:rendering) { YAML.safe_load(template.render({}, consumes: [database_link, ccdb_link, ccinternal_link]))['db'] }
+    context 'db_scheme is postgres' do
+      let(:ccdb_config) { super().reject { |k, _| k == 'address' } }
+
+      it { is_expected.to include('connection_string' => 'host=10.0.16.5 port=1234 user=admin_user dbname=ccdb password=admin_password sslmode=disable') }
+    end
+
+    context 'db_scheme is mysql' do
+      let(:ccdb_config) { super().merge({ 'db_scheme' => 'mysql' }).reject { |k, _| k == 'address' } }
+
+      it { is_expected.to include('connection_string' => 'admin_user:admin_password@tcp(10.0.16.5:1234)/ccdb?tls=false&parseTime=true') }
     end
   end
 
