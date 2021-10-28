@@ -43,11 +43,9 @@ describe 'cloud-controller' do
   let(:database_link) do
     Bosh::Template::Test::Link.new(
       name: 'database',
-      properties: {
-        'instances' => [{
+      instances: [{
           'address' => '10.0.16.5'
-        }]
-      }
+      }]
     )
   end
 

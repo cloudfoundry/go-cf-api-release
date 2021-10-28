@@ -4,7 +4,7 @@
   if ccdb_link.key?("address")
     database_address = ccdb_link.fetch("address")
   else
-    database_address = link('database').p('instances')[0].fetch('address')
+    database_address = link('database').instances[0].address
   end
   db = ccdb_link.fetch('databases').find { |db| db.fetch('tag') == 'cc' }
   db_user = ccdb_link.fetch('roles').find { |role| role.fetch('tag') == 'admin' }
