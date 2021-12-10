@@ -35,15 +35,16 @@ jobs:
       - name: Build BOSH release tarball
         run: |
           set -euo pipefail
-          VERSION="$(cat new_version)"
+          VERSION=${{ steps.tag_version.outputs.new_version }}
 
           bosh create-release --final --version "$VERSION" --tarball "cloudgontroller-boshrelease-$VERSION.tgz"
           
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
-          files: "cloudgontroller-boshrelease-*.tgz"
+          files: ./cloudgontroller-boshrelease-*.tgz
           fail_on_unmatched_files: true
-          body_path: changelog
+          body: ${{ steps.tag_version.outputs.changelog }}
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
           
           
