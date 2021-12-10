@@ -42,7 +42,7 @@ jobs:
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ./cloudgontroller-boshrelease-*.tgz
+          files: ./go-cf-api-boshrelease-*.tgz
           fail_on_unmatched_files: true
           body: ${{ steps.tag_version.outputs.changelog }}
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
