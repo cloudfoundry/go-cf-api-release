@@ -3,7 +3,7 @@
 require_relative 'spec_helper'
 
 describe 'route-registrar-health-check.sh' do
-  let(:job_name) { 'cloud-controller' }
+  let(:job_name) { 'go-cf-api' }
   let(:release) { Bosh::Template::Test::ReleaseDir.new(File.join(File.dirname(__FILE__), '..')) }
   let(:job) { release.job(job_name) }
   let(:template) { job.template('bin/route-registrar-health-check.sh') }

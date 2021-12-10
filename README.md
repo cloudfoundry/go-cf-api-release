@@ -1,5 +1,5 @@
-# Cloud Controller BOSH Release
-BOSH release for Go implementation of the Cloud Controller
+# GO-CF-API BOSH Release
+BOSH release for Golang PoC implementation of the Cloud Controller
 
 
 ## Project setup
@@ -19,8 +19,9 @@ To run the tests:
 bundle exec rspec -P spec/*_spec.rb
 ```
 
-## Building a final release
-Final releases are built by [this pipeline](https://dev.azure.com/sap/CP-ControlPlane/_build?definitionId=552). It is triggered by new tags.
+## Building a final release tarball
+Final releases are not built automatically at the moment.
+
 To create a new tag do the following:
 ```
 # Get the latest tag
@@ -37,6 +38,6 @@ We do not currently have a shared/public blobstore.
 This means that you will not be able to pull/push blobs for previous releases or use the vendored golang package.
 To create a new dev release:
 ```
-bosh vendor-package golang-1.16-linux ./src/golang-release
-bosh create-release --tarball "cloudgontroller-boshrelease.tgz"
+bosh vendor-package golang-1.17-linux ./src/golang-release
+bosh create-release --tarball "go-cf-api-release.tgz"
 ```

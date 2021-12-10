@@ -3,7 +3,7 @@
 require_relative 'spec_helper'
 
 describe 'bpm.yml' do
-  let(:job_name) { 'cloud-controller' }
+  let(:job_name) { 'go-cf-api' }
   let(:release) { Bosh::Template::Test::ReleaseDir.new(File.join(File.dirname(__FILE__), '..')) }
   let(:job) { release.job(job_name) }
   let(:template) { job.template('config/bpm.yml') }
@@ -22,12 +22,12 @@ describe 'bpm.yml' do
   end
 
   context 'db_scheme is postgres' do
-    it { is_expected.to include('executable' => '/var/vcap/jobs/cloud-controller/packages/cloud-controller/cloud-controller-psql') }
+    it { is_expected.to include('executable' => '/var/vcap/jobs/go-cf-api/packages/go-cf-api/go-cf-api-psql') }
   end
 
   context 'db_scheme is mysql' do
     let(:ccdb_config) { { 'db_scheme' => 'mysql' } }
-    it { is_expected.to include('executable' => '/var/vcap/jobs/cloud-controller/packages/cloud-controller/cloud-controller-mysql') }
+    it { is_expected.to include('executable' => '/var/vcap/jobs/go-cf-api/packages/go-cf-api/go-cf-api-mysql') }
   end
 
   context 'db_scheme is not postgres or mysql' do
@@ -38,7 +38,7 @@ describe 'bpm.yml' do
     end
   end
 
-  it { is_expected.to include('args' => ['/var/vcap/jobs/cloud-controller/config/cloud-controller.yml']) }
+  it { is_expected.to include('args' => ['/var/vcap/jobs/go-cf-api/config/go-cf-api.yml']) }
 end
 
 def get_process_from_bpm(bpm_config, job_name)

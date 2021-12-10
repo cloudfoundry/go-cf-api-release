@@ -51,7 +51,7 @@ uaa:
   url: <%= "https://#{p('uaa.internal_url')}:#{p('uaa.tls_port')}" %>
   client:
     tls_config:
-      ca_file: /var/vcap/jobs/cloud-controller/tls/uaa/ca.crt
+      ca_file: /var/vcap/jobs/go-cf-api/tls/uaa/ca.crt
 urls:
   log_stream: https://log-stream.<%= system_domain %>
   log_cache: https://log-cache.<%= system_domain %>

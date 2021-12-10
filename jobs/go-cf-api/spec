@@ -1,14 +1,14 @@
 ---
-name: cloud-controller
+name: go-cf-api
 
 templates:
   bpm.yml.erb: config/bpm.yml
-  cloud-controller.yml.erb: config/cloud-controller.yml
+  go-cf-api.yml.erb: config/go-cf-api.yml
   route-registrar-health-check.sh.erb: bin/route-registrar-health-check.sh
   tls/uaa/ca.crt.erb: tls/uaa/ca.crt
 
 packages:
-- cloud-controller
+- go-cf-api
 
 consumes:
 - name: database

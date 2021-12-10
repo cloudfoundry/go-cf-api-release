@@ -1,0 +1,14 @@
+---
+name: go-cf-api
+
+dependencies:
+- golang-1.17-linux
+
+files:
+- go-cf-api/**/*.go
+- go-cf-api/go.mod
+- go-cf-api/go.sum
+- go-cf-api/internal/config/defaults.yml
+
+excluded_files:
+- go-cf-api/**/*_test.go

@@ -3,18 +3,18 @@
   db_scheme = ccdb.fetch('db_scheme')
   executable = case db_scheme
   when 'postgres'
-    'cloud-controller-psql'
+    'go-cf-api-psql'
   when 'mysql'
-    'cloud-controller-mysql'
+    'go-cf-api-mysql'
   else
     raise "ccdb.db_scheme #{db_scheme} is not supported"
   end
 -%>
 processes:
-- name: cloud-controller
-  executable: /var/vcap/jobs/cloud-controller/packages/cloud-controller/<%= executable %>
+- name: go-cf-api
+  executable: /var/vcap/jobs/go-cf-api/packages/go-cf-api/<%= executable %>
   args:
-  - /var/vcap/jobs/cloud-controller/config/cloud-controller.yml
+  - /var/vcap/jobs/go-cf-api/config/go-cf-api.yml
   limits:
     processes: 3000000
     open_files: 800000

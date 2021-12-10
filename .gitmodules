@@ -1,6 +1,6 @@
-[submodule "src/cloudgontroller"]
-	path = src/cloudgontroller
-	url = https://github.tools.sap/cloudfoundry/cloudgontroller
 [submodule "src/golang-release"]
 	path = src/golang-release
 	url = https://github.com/bosh-packages/golang-release.git
+[submodule "src/go-cf-api"]
+	path = src/go-cf-api
+	url = https://github.com/cloudfoundry/go-cf-api.git

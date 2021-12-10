@@ -2,11 +2,11 @@
 
 require_relative 'spec_helper'
 
-describe 'cloud-controller' do
-  let(:job_name) { 'cloud-controller' }
+describe 'go-cf-api' do
+  let(:job_name) { 'go-cf-api' }
   let(:release) { Bosh::Template::Test::ReleaseDir.new(File.join(File.dirname(__FILE__), '..')) }
   let(:job) { release.job(job_name) }
-  let(:template) { job.template('config/cloud-controller.yml') }
+  let(:template) { job.template('config/go-cf-api.yml') }
   let(:ccdb_config) do
     {
       'db_scheme' => 'postgres',
@@ -108,7 +108,7 @@ describe 'cloud-controller' do
     end
 
     context 'ca_cert is provided' do
-      it { is_expected.to include('client' => { 'tls_config' => { 'ca_file' => '/var/vcap/jobs/cloud-controller/tls/uaa/ca.crt' } }) }
+      it { is_expected.to include('client' => { 'tls_config' => { 'ca_file' => '/var/vcap/jobs/go-cf-api/tls/uaa/ca.crt' } }) }
     end
   end
 

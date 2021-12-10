@@ -1,8 +1,0 @@
-set -eu
-
-source /var/vcap/packages/golang-1.16-linux/bosh/compile.env
-
-pushd cloudgontroller
-  go build -tags=psql -o "$BOSH_INSTALL_TARGET/cloud-controller-psql" cmd/main.go
-  go build -tags=mysql -o "$BOSH_INSTALL_TARGET/cloud-controller-mysql" cmd/main.go
-popd

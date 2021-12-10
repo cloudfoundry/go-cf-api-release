@@ -1,4 +1,4 @@
-name: cloud-controller
+name: go-cf-api
 blobstore:
   provider: local
   options:

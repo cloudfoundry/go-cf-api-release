@@ -1,0 +1,11 @@
+check process go-cf-api
+  with pidfile /var/vcap/sys/run/bpm/go-cf-api/go-cf-api.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start go-cf-api"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop go-cf-api"
+  group vcap
+  if failed
+    port 8282
+    protocol http
+    request "/healthz"
+  for 3 cycles
+  then restart

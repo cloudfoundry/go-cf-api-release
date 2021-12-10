@@ -1,0 +1,8 @@
+set -eu
+
+source /var/vcap/packages/golang-1.17-linux/bosh/compile.env
+
+pushd go-cf-api
+  go build -tags=psql -o "$BOSH_INSTALL_TARGET/go-cf-api-psql" cmd/main.go
+  go build -tags=mysql -o "$BOSH_INSTALL_TARGET/go-cf-api-mysql" cmd/main.go
+popd
