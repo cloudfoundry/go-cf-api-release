@@ -1,3 +1,5 @@
+[![Test](https://github.com/cloudfoundry/go-cf-api-release/actions/workflows/rspec.yml/badge.svg)](https://github.com/cloudfoundry/go-cf-api-release/actions/workflows/rspec.yml) [![Lint](https://github.com/cloudfoundry/go-cf-api-release/actions/workflows/rubocop.yml/badge.svg)](https://github.com/cloudfoundry/go-cf-api-release/actions/workflows/rubocop.yml)
+
 # GO-CF-API BOSH Release
 BOSH release for Golang PoC implementation of the Cloud Controller
 
