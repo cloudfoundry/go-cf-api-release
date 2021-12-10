@@ -37,7 +37,7 @@ jobs:
           set -euo pipefail
           VERSION=${{ steps.tag_version.outputs.new_version }}
 
-          bosh create-release --final --version "$VERSION" --tarball "cloudgontroller-boshrelease-$VERSION.tgz"
+          bosh create-release --final --version "$VERSION" --tarball "go-cf-api-boshrelease-$VERSION.tgz"
           
       - name: Publish Release
         uses: softprops/action-gh-release@v1
