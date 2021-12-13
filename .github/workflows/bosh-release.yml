@@ -3,6 +3,10 @@ name: Create BOSH release
 on:
   # Allows you to run this workflow manually from the Actions tab ONLY
   workflow_dispatch:
+    inputs:
+      release_tag:
+        required: false
+        description: Tag version to be released, e.g. '0.0.1'
 
 jobs:
   build:
@@ -13,12 +17,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Bump version and push tag
+      - name: Bump version and create tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          dry_run: false
+          custom_tag: ${{ github.event.inputs.release_tag }}
+          dry_run: true
           
       - name: Install BOSH CLI
         run: |
@@ -38,7 +43,14 @@ jobs:
           VERSION=${{ steps.tag_version.outputs.new_version }}
 
           bosh create-release --final --version "$VERSION" --tarball "go-cf-api-boshrelease-$VERSION.tgz"
-          
+      
+      - name: Push Tag
+        id: push_tag
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.tag_version.outputs.new_version }}
+
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
