@@ -38,12 +38,15 @@ jobs:
         run: bosh vendor-package golang-1.17-linux ./src/golang-release
         
       - name: Build BOSH release tarball
+        id: build_bosh_release
         run: |
           set -euo pipefail
           VERSION=${{ steps.tag_version.outputs.new_version }}
+          RELEASE_FILE=go-cf-api-boshrelease-"$VERSION".tgz
 
-          bosh create-release --final --version "$VERSION" --tarball "go-cf-api-boshrelease-$VERSION.tgz"
-      
+          bosh create-release --final --version "$VERSION" --tarball "$RELEASE_FILE"
+          echo "::set-output name=sha1::$(sha1sum "$RELEASE_FILE" | cut -d ' ' -f 1)"
+          
       - name: Push Tag
         id: push_tag
         uses: mathieudutour/github-tag-action@v6.0
@@ -56,7 +59,17 @@ jobs:
         with:
           files: ./go-cf-api-boshrelease-*.tgz
           fail_on_unmatched_files: true
-          body: ${{ steps.tag_version.outputs.changelog }}
+          body: |
+            ${{ steps.tag_version.outputs.changelog }}
+
+            ## Deployment
+            ```YAML
+            releases:
+              name: go-cf-api
+              version: ${{ steps.tag_version.outputs.new_version }}
+              url: https://github.com/cloudfoundry/go-cf-api-release/releases/download/${{ steps.tag_version.outputs.new_tag }}/go-cf-api-boshrelease-${{ steps.tag_version.outputs.new_version }}.tgz
+              sha1: ${{ steps.build_bosh_release.outputs.sha1 }}
+            ```
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           
           
