@@ -10,6 +10,12 @@ templates:
 packages:
 - go-cf-api
 
+provides:
+- name: go_cf_api
+  type: go_cf_api
+  properties:
+  - cc.public_tls.port
+
 consumes:
 - name: database
   type: database
